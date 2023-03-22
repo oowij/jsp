@@ -24,7 +24,7 @@
 				<td bgcolor="#F5F5F5"><font size="4"><b>글수정하기</b></font></td>
 			</tr>
 		</table>
-		<form method="post" action="updateGuestBookProc.jsp">
+		<form method="post" action="updateGuestBookProc.jsp?num=<%=num%>">
 			<table width="500" border="1" cellspacing="0" cellpadding="0">
 				<tr>
 					<td>
@@ -51,8 +51,9 @@
 								<input type="hidden" name="ip" value="<%=request.getRemoteAddr()%>">
 								<input type="submit" value="글수정"> 
 								<input type="reset" value="고치기">
-								<input type="checkbox" name="secret" value="1" <%if(bean.getSecret().equals("1")) out.print("checked");%>> 
-								<input type="checkbox" name="secret" value="1">비밀글
+								<input type="checkbox" name="secret" value="1">
+								<%if(bean.getSecret().equals("1")) out.print("checked");%> 
+							<!-- 	<input type="checkbox" name="secret" value="1"> -->비밀글
 								</td>
 							</tr>
 						</table>

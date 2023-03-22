@@ -94,13 +94,13 @@ public class CommentMgr {
 	   
 	   //Comment All Delete
 	   //delete from tblComment where num = ?\
-	   public void allDeleteComment(int num) {
+	   public void deleteAllComment(int num) {
 		   Connection con = null;
 		   PreparedStatement pstmt = null;
 		   String sql = null;
 		   try {
 			   con = pool.getConnection();
-			   sql = "delete from tblComment where cnum = ?";
+			   sql = "delete from tblComment where num = ?";
 			   pstmt = con.prepareStatement(sql);
 			   pstmt.setInt(1, num);
 			   pstmt.executeUpdate();

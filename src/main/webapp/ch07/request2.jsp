@@ -5,6 +5,7 @@
 	int port = request.getLocalPort();
 	//ip값
 	String remoteAddr = request.getRemoteAddr();
+	String method = request.getMethod();
 	String uri = request.getRequestURI();
 	StringBuffer url =request.getRequestURL();
 	//?이후에 요청 조건값
@@ -16,6 +17,7 @@
 protocal : <%=protocal%><br>
 port : <%=port%><br>
 remoteAddr : <%=remoteAddr%><br>
+method : <%=method%><br>
 uri : <%=uri%><br>
 url : <%=url%><br>
 query : <%=query%><br>
