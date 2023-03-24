@@ -21,5 +21,4 @@ public class loginServlet extends HttpServlet {
 		}
 		response.sendRedirect("login.jsp");
 	}
-
 }
