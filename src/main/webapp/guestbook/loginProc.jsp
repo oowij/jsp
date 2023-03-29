@@ -12,7 +12,7 @@
 	}
 	
    boolean result = mgr.loginJoin(login.getId(), login.getPwd());
-   //out.print(result);
+   //System.out.print(result);
    String msg = "로그인 실패";
    
    if(result){
