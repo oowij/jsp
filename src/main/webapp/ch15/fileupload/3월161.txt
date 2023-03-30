@@ -1,0 +1,26 @@
+<오늘 하는 거 추가 설명>
+function
+콤보박스 id가 teamselect
+선택되어진 것의 value
+team을 document.frm.team.value 붙여
+
+this를 써서 가능
+
+
+<오늘 하는 수업 내용>
+Team CRUD 예제
+1. JAVA
+- DBConnectionMgr.java
+- TeamBean.java
+- TeamMgr.java
+- MyUtil.java
+2. JSP & html & css
+- teamInsert.jsp(html) : 저장양식
+- teamInsertProc.jsp : 저장처리
+- teamList.jsp : 팀리스트
+- teamRead.jsp : 한 개의 team 정보
+- teamDelete.jsp : 삭제
+- teamUpdate.jsp : 수정양식
+- teamUpdateProc.jsp : 수정처리
+- style.css
+
