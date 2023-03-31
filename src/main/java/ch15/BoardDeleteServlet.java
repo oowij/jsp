@@ -28,7 +28,7 @@ public class BoardDeleteServlet extends HttpServlet {
       if(dbPass.equals(inPass)) {
          BoardMgr mgr = new BoardMgr();
          mgr.deleteBoard(bean.getNum());
-         
+         //관련 댓글 모두 삭제
          String numPerPage = request.getParameter("numPerPage");
          String nowPage = request.getParameter("nowPage");
          String keyField = request.getParameter("keyField");

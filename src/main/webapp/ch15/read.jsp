@@ -1,16 +1,37 @@
 <!-- read.jsp -->
+<%@page import="java.util.Vector"%>
+<%@page import="ch15.BCommentBean"%>
 <%@page import="ch15.BoardBean"%>
 <%@page import="ch15.UtilMgr"%>
 <%@page contentType="text/html; charset=UTF-8"%>
 <jsp:useBean id="mgr" class="ch15.BoardMgr"/>
+<jsp:useBean id="cmgr" class="ch15.BCommentMgr"/>
 <%
 	String nowPage = request.getParameter("nowPage");
 	String numPerPage = request.getParameter("numPerPage");
 	String keyField = request.getParameter("keyField");
 	String keyWord = request.getParameter("keyWord");
 	int num = UtilMgr.parseInt(request, "num");
+
+	//댓글 기능 : insert, delete
+	String flag = request.getParameter("flag");
+	if(flag!=null){
+		if(flag.equals("insert")){
+			//setproperty를 해줘야하는데 몇 개없어서 객체로 생성함.
+			BCommentBean cbean = new BCommentBean();
+			cbean.setNum(num);//어떤 게시물
+			cbean.setName(request.getParameter("cName"));
+			cbean.setComment(request.getParameter("comment"));
+			cmgr.insertBComment(cbean);
+		}else if(flag.equals("delete")){
+			cmgr.deleteBComment(UtilMgr.parseInt(request, "cnum"));
+		}
+	}else{
+		//list.jsp 게시물 읽음: 조회수 증가
+		mgr.upCount(num);
+	}
 	
-	mgr.upCount(num);
+	//조회수 기능
 	BoardBean bean = mgr.getBoard(num);
 	
 	String name = bean.getName();
@@ -34,12 +55,12 @@
 		document.listFrm.action = "list.jsp";
 		document.listFrm.submit();
 	}
-	
+	//파일 다운로드 기능
 	function down(filename) {
 		document.downFrm.filename.value=filename;
 		document.downFrm.submit();
 	}
-	
+	//게시글 삭제
 	function delFn() {
 		const pass = document.getElementById("passId");
 		//alert(pass.value);
@@ -51,7 +72,19 @@
 		document.delFrm.pass.value=pass.value;
 		document.delFrm.submit();
 	}
-	
+	function cInsert() {
+		if(document.cFrm.comment.value==""){
+			alert("댓글을 입력하세요.");
+			document.cFrm.comment.focus();
+			return;
+		}
+		document.cFrm.submit();
+	}
+	function cDel(cnum) {
+		document.cFrm.cnum.value=cnum;
+		document.cFrm.flag.value="delete";
+		document.cFrm.submit();
+	}
 </script>
 </head>
 <body bgcolor="#FFFFCC">
@@ -77,6 +110,10 @@
      <td align="center" bgcolor="#DDDDDD">첨부파일</td>
      <td bgcolor="#FFFFE8" colspan="3">
 		<%if(filename!=null&&!filename.equals("")){%>
+		<!-- 
+		&& => 앞의 조건이 false면 그냥 false라서 뒤로 가지않고 빠져나온다.
+		& => false가 나오면 어짜피 false지만 뒤로가서 조건을 실행하고 나온다.
+		-->
 		<a href="javascript:down('<%=filename%>')"><%=filename%></a>
 		<%}else{ out.println("첨부된 파일이 없습니다.");}%>
 		<font color="blue">(<%=UtilMgr.intFormat(filesize)%>bytes)</font>
@@ -101,11 +138,65 @@
  </tr>
  <tr>
   <td align="center" colspan="2">
-
+  <!-- 댓글 입력폼 Start -->
+	<form method="post" name="cFrm">
+		<table>
+			<tr  align="center">
+				<td width="50">이 름</td>
+				<td align="left">
+					<input name="cName" size="10" value="aaa">
+				</td>
+			</tr>
+			<tr align="center">
+				<td>내 용</td>
+				<td>
+				<input name="comment" size="50"> 
+				<input type="button" value="등록" onclick="cInsert()"></td>
+			</tr>
+		</table>
+	<input type="hidden" name="flag" value="insert">	
+	<input type="hidden" name="num" value="<%=num%>">
+	<input type="hidden" name="cnum">
+    <input type="hidden" name="nowPage" value="<%=nowPage%>">
+    <input type="hidden" name="numPerPage" value="<%=numPerPage%>">
+   	<%if(!(keyWord==null||keyWord.equals(""))){ %>
+    <input type="hidden" name="keyField" value="<%=keyField%>">
+    <input type="hidden" name="keyWord" value="<%=keyWord%>">
+	<%}%>
+	</form>
   <!-- 댓글 입력폼 End -->
  <hr/>
  <!-- 댓글 List Start -->
-
+ <% 
+ 	Vector<BCommentBean> cvlist = cmgr.getBComment(num);
+ 	if(!cvlist.isEmpty()){
+ 		//out.println(cvlist.size());
+ %>
+ 	<table>
+ 	<%
+ 		for(int i=0;i<cvlist.size();i++){
+			BCommentBean cbean = cvlist.get(i);
+			int cnum = cbean.getCnum();
+			String cname = cbean.getName();
+			String comment = cbean.getComment();
+			String cregdate = cbean.getRegdate();
+ 	%>
+ 	  	<tr>
+			<td colspan="3" width="600"><b><%=cname%></b></td>
+		</tr>
+		<tr>
+			<td>댓글:<%=comment%></td>
+			<td align="right"><%=cregdate%></td>
+			<td align="center" valign="middle">
+			<input type="button" value="삭제" onclick="cDel('<%=cnum%>')">
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3"><br></td>
+		</tr>
+ 	<%}//for%>
+ 	</table>
+ <%}//if%>
  <!-- 댓글 List End -->
  [ <a href="javascript:list()" >리스트</a> | 
  <a href="update.jsp?nowPage=<%=nowPage%>&num=<%=num%>&numPerPage=<%=numPerPage%>" >수 정</a> |
