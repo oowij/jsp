@@ -1,10 +1,9 @@
 package ch16;
 
 public class PollItemBean {
-	
 	private int listnum;
-	private int itemnum;
-	private String [] item;
+	private int []itemnum;
+	private String []item;
 	private int count;
 	
 	public int getListnum() {
@@ -13,10 +12,10 @@ public class PollItemBean {
 	public void setListnum(int listnum) {
 		this.listnum = listnum;
 	}
-	public int getItemnum() {
+	public int []getItemnum() {
 		return itemnum;
 	}
-	public void setItemnum(int itemnum) {
+	public void setItemnum(int []itemnum) {
 		this.itemnum = itemnum;
 	}
 	public String[] getItem() {
@@ -31,4 +30,6 @@ public class PollItemBean {
 	public void setCount(int count) {
 		this.count = count;
 	}
+	
+	
 }
